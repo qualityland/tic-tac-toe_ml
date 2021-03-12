@@ -1,11 +1,12 @@
 library(readr)
 library(gbm)
 
+# get UCI data set
 tic_tac_toe <- readr::read_csv(
   "https://archive.ics.uci.edu/ml/machine-learning-databases/tic-tac-toe/tic-tac-toe.data"
 )
 
-# better column names
+# descriptive column names
 colnames(tic_tac_toe) <-
   c(
     'top-left',
@@ -28,23 +29,23 @@ tic_tac_toe$result <- ifelse(tic_tac_toe$result == "negative", 0, 1)
 
 # split training from test data (80/20)
 idx <- sample(1:nrow(tic_tac_toe), 0.8 * nrow(tic_tac_toe))
-trai_df <- tic_tac_toe[idx, ]
-test_df <- tic_tac_toe[-idx, ]
+trn_df <- tic_tac_toe[idx, ]
+tst_df <- tic_tac_toe[-idx, ]
 
-# model
+# train the model
 gbm1 <-
   gbm(
     result ~ .,
-    data = trai_df,
+    data = trn_df,
     distribution = "bernoulli",
     n.trees = 2000,
     interaction.depth = 4
   )
 
-# prediction
+# test data predictions
 preds <-
   predict(gbm1,
-          newdata = test_df,
+          newdata = tst_df,
           type = "response",
           n.trees = 2000)
 
