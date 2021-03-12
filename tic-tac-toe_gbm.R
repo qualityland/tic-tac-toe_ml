@@ -53,7 +53,7 @@ preds <-
 preds_enc <- ifelse(preds < 0.5, 0, 1)
 
 # percentage of correct predictions
-sum(preds_enc == test_df$result) / nrow(test_df)
+sum(preds_enc == tst_df$result) / nrow(tst_df)
 
 # summary
 summary(gbm1)
